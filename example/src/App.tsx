@@ -1,18 +1,29 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-developer-options';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import {
+  isDeveloperModeEnabled,
+  openDeveloperSettings,
+} from 'react-native-developer-options';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [result, setResult] = React.useState<string>('/');
 
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+    isDeveloperModeEnabled().then((isEnabled) => {
+      setResult(isEnabled ? 'yes' : 'no');
+    });
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Is developer mode enabled: {result}</Text>
+      <Button
+        title="Open developer settings"
+        onPress={() => {
+          openDeveloperSettings();
+        }}
+      />
     </View>
   );
 }

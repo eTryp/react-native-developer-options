@@ -6,7 +6,9 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo managed workflow\n';
 
-const DeveloperOptions = NativeModules.DeveloperOptions  ? NativeModules.DeveloperOptions  : new Proxy(
+const DeveloperOptions = NativeModules.DeveloperOptions
+  ? NativeModules.DeveloperOptions
+  : new Proxy(
       {},
       {
         get() {
@@ -15,6 +17,18 @@ const DeveloperOptions = NativeModules.DeveloperOptions  ? NativeModules.Develop
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return DeveloperOptions.multiply(a, b);
+export function isDeveloperModeEnabled(): Promise<boolean> {
+  if (Platform.OS === 'android') {
+    return DeveloperOptions.isDeveloperModeEnabled();
+  } else {
+    throw Error('Platform not supported');
+  }
+}
+
+export function openDeveloperSettings(): Promise<void> {
+  if (Platform.OS === 'android') {
+    return DeveloperOptions.openDeveloperSettings();
+  } else {
+    throw Error('Platform not supported');
+  }
 }
